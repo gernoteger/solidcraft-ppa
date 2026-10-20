@@ -102,7 +102,7 @@ jobs:
       - name: Install packaging tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends dput debhelper devscripts
+          sudo apt-get install -y --no-install-recommends build-essential dput debhelper devscripts
 
       - name: Import signing key
         env:

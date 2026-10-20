@@ -11,6 +11,7 @@ debian/rules unpacks the .deb matching the build architecture with dpkg-deb -x.
 The binaries are not rebuilt, stripped or otherwise modified.
 
 scripts/fetch-upstream.sh downloads and checksums those files;
-scripts/build-source.sh generates the orig tarball and the per-series
-debian/changelog entry. The Debian version appends "ppa1" to the upstream
-Debian revision (0.17.0-1 becomes 0.17.0-1ppa1).
+scripts/build-source.sh generates the orig tarball, a series-independent
+debian/changelog entry and, per series, the .changes file that routes the
+upload. The Debian version appends "ppa2" to the upstream Debian revision
+(0.17.0-1 becomes 0.17.0-1ppa2).

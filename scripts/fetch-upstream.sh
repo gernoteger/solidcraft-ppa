@@ -85,8 +85,8 @@ arm_version=$(dpkg-deb -f "$vendor/solidcraft-linux-aarch64.deb" Version)
 [[ $(dpkg-deb -f "$vendor/solidcraft-linux-aarch64.deb" Architecture) == arm64 ]] ||
   die "unexpected architecture in aarch64 deb"
 
-# 0.17.0-1 becomes 0.17.0-1ppa1, which sorts above upstream's own deb.
-deb_version="${x86_version}ppa1"
+# 0.17.0-1 becomes 0.17.0-1ppa2, which sorts above upstream's own deb.
+deb_version="${x86_version}ppa2"
 upstream_version="${x86_version%-*}"
 [[ -n $published ]] || published=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 

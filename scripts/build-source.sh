@@ -3,7 +3,7 @@
 # upstream debs.
 #
 # Usage: scripts/build-source.sh SERIES [DATE] [GPG_KEY_ID]
-#   SERIES     Ubuntu series from debian/changelog, e.g. noble or resolute
+#   SERIES     Ubuntu series the .changes file targets, e.g. noble or resolute
 #   DATE       RFC 3339 timestamp used for the changelog (default: now)
 #   GPG_KEY_ID signing key; without it the package is left unsigned
 #
@@ -31,8 +31,12 @@ release_epoch=$(date -u -d "$UPSTREAM_DATE" +%s) ||
 release_date=$(date -u -R -d "@$release_epoch")
 maintainer=$(sed -n 's/^Maintainer: *//p' debian/control | head -n1)
 
+# The changelog distribution is deliberately constant: Launchpad keys the
+# files listed in the .dsc by version, so every series must upload a
+# byte-identical .orig.tar.gz and .debian.tar.xz. The target series goes into
+# the .changes file below, which is what Launchpad uses to route the upload.
 cat > debian/changelog <<EOF
-solidcraft ($DEB_VERSION) $series; urgency=medium
+solidcraft ($DEB_VERSION) unstable; urgency=medium
 
   * Repackage upstream $UPSTREAM_TAG Linux binaries.
     See $UPSTREAM_URL.
@@ -64,4 +68,14 @@ fi
 
 changes="../solidcraft_${DEB_VERSION}_source.changes"
 [[ -f $changes ]] || die "expected $changes"
+
+# Route the upload to this series and re-sign, since editing a signed
+# .changes file invalidates the signature.
+sed -i "s/^Distribution: .*/Distribution: $series/" "$changes"
+if [[ -n $key ]]; then
+  command -v debsign >/dev/null ||
+    die "debsign (devscripts) is required to re-sign $changes"
+  debsign --re-sign -k"$key" "$changes" >/dev/null
+fi
+
 printf '%s\n' "$changes"

@@ -72,7 +72,7 @@ jobs:
           fi
 
       - if: steps.missing.outputs.series != '[]'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: vendor-debs
           path: |
@@ -94,7 +94,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: vendor-debs
           path: vendor

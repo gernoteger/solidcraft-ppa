@@ -1,0 +1,6 @@
+solidcraft (0.17.0-1ppa1) resolute; urgency=medium
+
+  * Repackage upstream v0.17.0 Linux binaries.
+    See https://github.com/tangency-labs/solidcraft/releases/tag/v0.17.0.
+
+ -- Gernot Eger <gernot.eger@gmail.com>  Tue, 20 Oct 2026 16:41:46 +0000

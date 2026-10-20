@@ -1,0 +1,16 @@
+This source package repackages the prebuilt Linux binaries from the upstream
+SolidCraft GitHub release.
+
+Upstream does not publish a Debian source package and Launchpad builders have no
+network access, so the upstream .deb files are vendored in the orig tarball:
+
+  vendor/solidcraft-linux-x86_64.deb
+  vendor/solidcraft-linux-aarch64.deb
+
+debian/rules unpacks the .deb matching the build architecture with dpkg-deb -x.
+The binaries are not rebuilt, stripped or otherwise modified.
+
+scripts/fetch-upstream.sh downloads and checksums those files;
+scripts/build-source.sh generates the orig tarball and the per-series
+debian/changelog entry. The Debian version appends "ppa1" to the upstream
+Debian revision (0.17.0-1 becomes 0.17.0-1ppa1).

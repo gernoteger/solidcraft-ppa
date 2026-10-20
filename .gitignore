@@ -1,0 +1,17 @@
+# Upstream binaries fetched by scripts/fetch-upstream.sh
+/vendor/*.deb
+/vendor/SHA256SUMS.txt
+/vendor/metadata.env
+
+# dpkg-buildpackage leftovers
+/debian/files
+/debian/.debhelper/
+/debian/debhelper-build-stamp
+/debian/*.substvars
+/debian/*.debhelper
+/debian/*.debhelper.log
+/debian/solidcraft/
+/*.changes
+/*.dsc
+/*.orig.tar.*
+/*.debian.tar.*

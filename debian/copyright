@@ -1,0 +1,17 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: SolidCraft
+Upstream-Contact: SolidCraft contributors
+Source: https://github.com/tangency-labs/solidcraft
+Comment: This package repackages the prebuilt Linux binaries published in the
+ upstream GitHub release. Launchpad does not rebuild them from source. The
+ repackaging is done by the PPA maintainer, not by the upstream project.
+
+Files: *
+Copyright: 2026 SolidCraft contributors
+License: Apache-2.0 or MIT
+ The upstream project is dual-licensed under Apache-2.0 or MIT, at your option.
+ .
+ On Debian systems the complete text of the Apache-2.0 license is available in
+ /usr/share/common-licenses/Apache-2.0. The MIT text is shipped with the
+ binaries in /usr/share/doc/solidcraft/LICENSE-MIT, together with
+ LICENSE-APACHE, NOTICE and THIRD-PARTY-LICENSES.txt.

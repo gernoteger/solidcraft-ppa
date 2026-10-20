@@ -1,0 +1,37 @@
+Source: solidcraft
+Section: graphics
+Priority: optional
+Maintainer: Gernot Eger <gernot.eger@gmail.com>
+Build-Depends: debhelper-compat (= 13)
+Rules-Requires-Root: no
+Standards-Version: 4.7.0
+Homepage: https://solidcraft.io/
+Vcs-Git: https://github.com/gernoteger/solidcraft-ppa.git
+Vcs-Browser: https://github.com/gernoteger/solidcraft-ppa
+
+Package: solidcraft
+Architecture: amd64 arm64
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ libc6 (>= 2.35),
+ libgcc-s1,
+ libxkbcommon0,
+ libxkbcommon-x11-0,
+ libwayland-client0,
+ libx11-6,
+ libx11-xcb1,
+ libxcb1,
+ libxcursor1,
+ libxi6,
+ libvulkan1 | libegl1
+Recommends: mesa-vulkan-drivers, libegl-mesa0, xdg-desktop-portal
+Replaces: solvecraft
+Provides: solvecraft
+Conflicts: solvecraft
+Description: Open-source, independent parametric 3D CAD
+ Sketches with a constraint solver, a parametric feature timeline,
+ components and joints, sheet metal; STEP, IGES, 3MF, STL and OBJ.
+ Includes solidcraft-cli, a headless command runner and MCP server for AI
+ agents.
+ .
+ This package repackages the upstream prebuilt Linux release binaries. It is not
+ compiled from source by Launchpad.

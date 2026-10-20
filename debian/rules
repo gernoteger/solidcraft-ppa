@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+include /usr/share/dpkg/architecture.mk
+
+DEB_ARCH := $(if $(filter amd64,$(DEB_HOST_ARCH)),x86_64,$(if $(filter arm64,$(DEB_HOST_ARCH)),aarch64,))
+VENDOR_DEB := vendor/solidcraft-linux-$(DEB_ARCH).deb
+
+%:
+	dh $@
+
+override_dh_auto_clean override_dh_auto_configure override_dh_auto_build override_dh_auto_test:
+	@true
+
+override_dh_auto_install:
+	@test -n "$(DEB_ARCH)" || { echo "solidcraft-ppa: unsupported architecture $(DEB_HOST_ARCH)" >&2; exit 1; }
+	@test -f "$(VENDOR_DEB)" || { echo "solidcraft-ppa: missing $(VENDOR_DEB); run scripts/fetch-upstream.sh first" >&2; exit 1; }
+	dpkg-deb -x "$(VENDOR_DEB)" debian/solidcraft
+
+# Keep the upstream binaries byte-identical.
+override_dh_strip override_dh_dwz override_dh_strip_nondeterminism:
+	@true
+
+override_dh_compress:
+	dh_compress -X.txt -X.md

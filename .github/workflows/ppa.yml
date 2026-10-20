@@ -110,6 +110,12 @@ jobs:
         run: |
           install -d -m 700 ~/.gnupg
           printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
+          # Mark the key as ultimately trusted, so dput's own signature check
+          # reports a valid signature instead of a bogus "Error checking
+          # signature" (gpgme only sets the validity summary for trusted keys).
+          fpr=$(gpg --batch --with-colons --list-secret-keys |
+            awk -F: '/^fpr:/ { print $10; exit }')
+          printf '%s:6:\n' "$fpr" | gpg --batch --import-ownertrust
           gpg --list-secret-keys --keyid-format long
 
       - name: Build source package

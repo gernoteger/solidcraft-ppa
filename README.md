@@ -30,26 +30,47 @@ sudo apt install solidcraft
    PPA name; the Launchpad username can differ from your GitHub handle, so
    adjust them (and the links above) if necessary.
 
-2. **Create a dedicated signing key**:
+2. **Create a dedicated signing key** with a certify-only primary key and a
+   signing subkey. CI then only needs the subkey, and the primary key can stay
+   offline:
 
    ```sh
-   gpg --quick-generate-key "Gernot Eger <gernot.eger@gmail.com>" rsa4096 sign 3y
+   # Certify-only primary key
+   gpg --quick-generate-key "Gernot Eger <gernot.eger@gmail.com>" rsa4096 cert 5y
    gpg --list-secret-keys --keyid-format long
-   gpg --armor --export-secret-keys <KEY_ID> > solidcraft-ppa-signing.asc
+   FPR=<primary fingerprint from the sec line>
+
+   # Signing subkey (GnuPG 2.2+)
+   gpg --quick-add-key "$FPR" rsa4096 sign 3y
+
+   # Note the ssb fingerprint; that is GPG_KEY_ID
+   gpg --list-secret-keys --keyid-format long --with-subkey-fingerprint "$FPR"
+
+   # Public key for Launchpad (includes the subkey)
+   gpg --armor --export "$FPR" > solidcraft-ppa.asc
+
+   # Secret subkeys for CI (primary secret is exported as a stub only)
+   gpg --armor --export-secret-subkeys "$FPR" > solidcraft-ppa-secret.asc
    ```
 
-   Register the public key at
+   If you already have a key, run only the `--quick-add-key` step with its
+   primary fingerprint, then repeat the two exports (and re-upload the public
+   key if it was already registered). With `gpg --edit-key "$FPR"` you can use
+   `addkey` → *RSA (sign only)* → `4096` → `3y` → `save` instead.
+
+   Register `solidcraft-ppa.asc` at
    <https://launchpad.net/people/+me/+editpgpkeys> and confirm the email
-   Launchpad sends you. A passphrase-less key is simplest for CI; if the key
-   has a passphrase, also set `GPG_PASSPHRASE` below.
+   Launchpad sends you. The subkey uses the primary key's passphrase; if it has
+   one, also set `GPG_PASSPHRASE` below. If you want the subkey to be
+   passphrase-less, change it with `gpg --edit-key "$FPR"` → `key 1` → `passwd`.
 
 3. **Add repository secrets** (*Settings → Secrets and variables → Actions*):
 
    | Secret | Value |
    | --- | --- |
-   | `GPG_PRIVATE_KEY` | contents of `solidcraft-ppa-signing.asc` |
-   | `GPG_KEY_ID` | fingerprint of the signing (sub)key |
-   | `GPG_PASSPHRASE` | optional, only for a protected key |
+   | `GPG_PRIVATE_KEY` | contents of `solidcraft-ppa-secret.asc` |
+   | `GPG_KEY_ID` | fingerprint of the signing **subkey** (`ssb` line) |
+   | `GPG_PASSPHRASE` | optional, only for a protected subkey |
 
 4. **Push this repository to GitHub** and run the workflow once by hand:
    *Actions → PPA → Run workflow*. Builds for uploaded sources appear at

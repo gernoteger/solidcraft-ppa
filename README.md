@@ -92,8 +92,8 @@ missing the new version. `upload` then runs once per series and:
 - `dput`s it to Launchpad.
 
 The version is the upstream Debian version with `ppa3` appended to the
-revision and a `~<series>` suffix: upstream `0.18.2-1` becomes
-`0.18.2-1ppa3~noble` or `0.18.2-1ppa3~resolute`. Launchpad keeps only one
+revision and a `+<series>` suffix: upstream `0.18.2-1` becomes
+`0.18.2-1ppa3+noble` or `0.18.2-1ppa3+resolute`. Launchpad keeps only one
 source package per version in an archive, so the suffix is what lets one PPA
 serve several series. A version that is already published is never uploaded
 again.

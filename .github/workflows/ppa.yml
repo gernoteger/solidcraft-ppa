@@ -146,7 +146,7 @@ jobs:
           VERSION: ${{ needs.prepare.outputs.version }}
           SERIES: ${{ matrix.series }}
         run: |
-          series_version="${VERSION}~${SERIES}"
+          series_version="${VERSION}+${SERIES}"
           changes="../solidcraft_${series_version}_source.changes"
           test -f "$changes"
           dput "ppa:${LP_OWNER}/${LP_ARCHIVE}" "$changes"
@@ -156,6 +156,6 @@ jobs:
           VERSION: ${{ needs.prepare.outputs.version }}
           SERIES: ${{ matrix.series }}
         run: |
-          echo "Uploaded \`${VERSION}~${SERIES}\` for **${SERIES}**" \
+          echo "Uploaded \`${VERSION}+${SERIES}\` for **${SERIES}**" \
             "to https://launchpad.net/~$LP_OWNER/+archive/ubuntu/$LP_ARCHIVE" \
             >> "$GITHUB_STEP_SUMMARY"

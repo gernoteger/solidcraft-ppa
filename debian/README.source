@@ -14,5 +14,5 @@ scripts/fetch-upstream.sh downloads and checksums those files;
 scripts/build-source.sh generates the orig tarball, a series-independent
 debian/changelog entry and, per series, the .changes file that routes the
 upload. The Debian version appends "ppa3" to the upstream Debian revision and
-a per-series suffix (0.18.2-1 becomes 0.18.2-1ppa3~noble), since Launchpad
+a per-series suffix (0.18.2-1 becomes 0.18.2-1ppa3+noble), since Launchpad
 keeps one source version per archive.

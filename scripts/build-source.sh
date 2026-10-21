@@ -26,8 +26,8 @@ for field in UPSTREAM_VERSION DEB_VERSION UPSTREAM_DATE UPSTREAM_TAG UPSTREAM_UR
 done
 
 # Launchpad only keeps one source package per version in an archive, so each
-# series gets its own version: 0.18.2-1ppa3 becomes 0.18.2-1ppa3~noble.
-series_version="${DEB_VERSION}~${series}"
+# series gets its own version: 0.18.2-1ppa3 becomes 0.18.2-1ppa3+noble.
+series_version="${DEB_VERSION}+${series}"
 [[ -f debian/control ]] || die "run this from the packaging repository root"
 
 release_epoch=$(date -u -d "$UPSTREAM_DATE" +%s) ||
@@ -37,7 +37,7 @@ maintainer=$(sed -n 's/^Maintainer: *//p' debian/control | head -n1)
 
 # The changelog distribution is deliberately constant: the target series goes
 # into the .changes file below, which is what Launchpad uses to route the
-# upload. The version carries a ~<series> suffix so that every series gets its
+# upload. The version carries a +<series> suffix so that every series gets its
 # own source package.
 cat > debian/changelog <<EOF
 solidcraft ($series_version) unstable; urgency=medium

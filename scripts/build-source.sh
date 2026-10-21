@@ -44,6 +44,12 @@ solidcraft ($DEB_VERSION) unstable; urgency=medium
  -- $maintainer  $release_date
 EOF
 
+# Normalise file timestamps: dpkg-source copies the mtimes of debian/ into
+# the .debian.tar.xz, so two checkouts (one per series, or one per run) would
+# otherwise produce different files and Launchpad would reject the second
+# series for a version it already has.
+find . -path ./.git -prune -o -exec touch -h -d "@$release_epoch" {} +
+
 # The orig tarball holds everything except debian/ (and the VCS directory), so
 # the binaries stay byte-identical and dpkg-source has nothing to patch.
 tmp=$(mktemp -d)

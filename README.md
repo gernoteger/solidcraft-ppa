@@ -91,8 +91,8 @@ missing the new version. `upload` then runs once per series and:
 - builds and GPG-signs the source package,
 - `dput`s it to Launchpad.
 
-The version is the upstream Debian version with `ppa2` appended to the
-revision: upstream `0.17.0-1` becomes `0.17.0-1ppa2`, which upgrades over the
+The version is the upstream Debian version with `ppa3` appended to the
+revision: upstream `0.17.0-1` becomes `0.17.0-1ppa3`, which upgrades over the
 release `.deb`. A version that is already published is never uploaded again,
 because Launchpad rejects duplicate versions even after a failed build.
 
@@ -107,7 +107,7 @@ The default series are `noble` and `resolute`. Edit `DEFAULT_SERIES` in
 scripts/fetch-upstream.sh            # or: scripts/fetch-upstream.sh v0.17.0
 
 # Which series still need this version?
-scripts/missing-series.sh 0.17.0-1ppa2
+scripts/missing-series.sh 0.17.0-1ppa3
 
 # Build a source package locally (unsigned)
 scripts/build-source.sh resolute

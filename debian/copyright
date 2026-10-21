@@ -6,6 +6,10 @@ Comment: This package repackages the prebuilt Linux binaries published in the
  upstream GitHub release. Launchpad does not rebuild them from source. The
  repackaging is done by the PPA maintainer, not by the upstream project.
 
+Files: debian/*
+Copyright: 2026 Gernot Eger <gernot.eger@gmail.com>
+License: Apache-2.0 or MIT
+
 Files: *
 Copyright: 2026 SolidCraft contributors
 License: Apache-2.0 or MIT

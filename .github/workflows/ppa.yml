@@ -144,13 +144,18 @@ jobs:
       - name: Upload to Launchpad
         env:
           VERSION: ${{ needs.prepare.outputs.version }}
+          SERIES: ${{ matrix.series }}
         run: |
-          changes="../solidcraft_${VERSION}_source.changes"
+          series_version="${VERSION}~${SERIES}"
+          changes="../solidcraft_${series_version}_source.changes"
           test -f "$changes"
           dput "ppa:${LP_OWNER}/${LP_ARCHIVE}" "$changes"
 
       - name: Summary
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SERIES: ${{ matrix.series }}
         run: |
-          echo "Uploaded \`${{ needs.prepare.outputs.version }}\` for **${{ matrix.series }}**" \
+          echo "Uploaded \`${VERSION}~${SERIES}\` for **${SERIES}**" \
             "to https://launchpad.net/~$LP_OWNER/+archive/ubuntu/$LP_ARCHIVE" \
             >> "$GITHUB_STEP_SUMMARY"

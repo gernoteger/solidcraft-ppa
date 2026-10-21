@@ -24,6 +24,10 @@ die() { printf 'error: %s\n' "$*" >&2; exit 1; }
 for field in UPSTREAM_VERSION DEB_VERSION UPSTREAM_DATE UPSTREAM_TAG UPSTREAM_URL; do
   [[ -n ${!field:-} ]] || die "$field is empty in vendor/metadata.env"
 done
+
+# Launchpad only keeps one source package per version in an archive, so each
+# series gets its own version: 0.18.2-1ppa3 becomes 0.18.2-1ppa3~noble.
+series_version="${DEB_VERSION}~${series}"
 [[ -f debian/control ]] || die "run this from the packaging repository root"
 
 release_epoch=$(date -u -d "$UPSTREAM_DATE" +%s) ||
@@ -31,12 +35,12 @@ release_epoch=$(date -u -d "$UPSTREAM_DATE" +%s) ||
 release_date=$(date -u -R -d "@$release_epoch")
 maintainer=$(sed -n 's/^Maintainer: *//p' debian/control | head -n1)
 
-# The changelog distribution is deliberately constant: Launchpad keys the
-# files listed in the .dsc by version, so every series must upload a
-# byte-identical .orig.tar.gz and .debian.tar.xz. The target series goes into
-# the .changes file below, which is what Launchpad uses to route the upload.
+# The changelog distribution is deliberately constant: the target series goes
+# into the .changes file below, which is what Launchpad uses to route the
+# upload. The version carries a ~<series> suffix so that every series gets its
+# own source package.
 cat > debian/changelog <<EOF
-solidcraft ($DEB_VERSION) unstable; urgency=medium
+solidcraft ($series_version) unstable; urgency=medium
 
   * Repackage upstream $UPSTREAM_TAG Linux binaries.
     See $UPSTREAM_URL.
@@ -44,10 +48,8 @@ solidcraft ($DEB_VERSION) unstable; urgency=medium
  -- $maintainer  $release_date
 EOF
 
-# Normalise file timestamps: dpkg-source copies the mtimes of debian/ into
-# the .debian.tar.xz, so two checkouts (one per series, or one per run) would
-# otherwise produce different files and Launchpad would reject the second
-# series for a version it already has.
+# Normalise file timestamps so that rebuilding the source package from another
+# checkout produces byte-identical tarballs.
 find . -path ./.git -prune -o -exec touch -h -d "@$release_epoch" {} +
 
 # The orig tarball is immutable for a given upstream version: Launchpad
@@ -105,7 +107,7 @@ fi
 # dpkg-buildpackage wrote the source package next to the build tree.
 mv "$tmp"/solidcraft_* ..
 
-changes="../solidcraft_${DEB_VERSION}_source.changes"
+changes="../solidcraft_${series_version}_source.changes"
 [[ -f $changes ]] || die "expected $changes"
 
 # Route the upload to this series and re-sign, since editing a signed

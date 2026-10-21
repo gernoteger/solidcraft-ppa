@@ -1,4 +1,4 @@
-solidcraft (0.18.2-1ppa3) resolute; urgency=medium
+solidcraft (0.18.2-1ppa3~resolute) resolute; urgency=medium
 
   * Repackage upstream v0.18.2 Linux binaries.
     See https://github.com/tangency-labs/solidcraft/releases/tag/v0.18.2.

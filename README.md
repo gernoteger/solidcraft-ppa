@@ -92,9 +92,11 @@ missing the new version. `upload` then runs once per series and:
 - `dput`s it to Launchpad.
 
 The version is the upstream Debian version with `ppa3` appended to the
-revision: upstream `0.17.0-1` becomes `0.17.0-1ppa3`, which upgrades over the
-release `.deb`. A version that is already published is never uploaded again,
-because Launchpad rejects duplicate versions even after a failed build.
+revision and a `~<series>` suffix: upstream `0.18.2-1` becomes
+`0.18.2-1ppa3~noble` or `0.18.2-1ppa3~resolute`. Launchpad keeps only one
+source package per version in an archive, so the suffix is what lets one PPA
+serve several series. A version that is already published is never uploaded
+again.
 
 The default series are `noble` and `resolute`. Edit `DEFAULT_SERIES` in
 `.github/workflows/ppa.yml` (or pass the `series` input) to change them.
@@ -107,7 +109,7 @@ The default series are `noble` and `resolute`. Edit `DEFAULT_SERIES` in
 scripts/fetch-upstream.sh            # or: scripts/fetch-upstream.sh v0.17.0
 
 # Which series still need this version?
-scripts/missing-series.sh 0.17.0-1ppa3
+scripts/missing-series.sh 0.18.2-1ppa3
 
 # Build a source package locally (unsigned)
 scripts/build-source.sh resolute

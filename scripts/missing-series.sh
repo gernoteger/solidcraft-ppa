@@ -4,6 +4,9 @@
 #
 # Usage: scripts/missing-series.sh VERSION
 #
+# VERSION is the base version; the per-series "~SERIES" suffix is appended
+# here, because each series holds its own source version.
+#
 # Environment: LP_OWNER, LP_ARCHIVE, SERIES (space separated).
 set -euo pipefail
 
@@ -15,6 +18,7 @@ ppa_url="https://api.launchpad.net/1.0/~$owner/+archive/ubuntu/$archive"
 
 missing=()
 for series in $series_list; do
+  series_version="$version~$series"
   if ! body=$(curl -fsS --get "$ppa_url" \
     --data-urlencode "ws.op=getPublishedSources" \
     --data-urlencode "source_name=solidcraft" \
@@ -37,8 +41,8 @@ found = any(
     for entry in data.get("entries", [])
 )
 sys.exit(0 if found else 1)
-' "$version"; then
-    printf '%s already has %s\n' "$series" "$version" >&2
+' "$series_version"; then
+    printf '%s already has %s\n' "$series" "$series_version" >&2
   else
     missing+=("$series")
   fi

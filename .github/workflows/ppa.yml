@@ -2,7 +2,7 @@ name: PPA
 
 on:
   schedule:
-    - cron: "17 4 * * *"
+    - cron: "17 4/12 * * *"
   workflow_dispatch:
     inputs:
       tag:
@@ -25,7 +25,7 @@ env:
   UPSTREAM_REPO: tangency-labs/solidcraft
   LP_OWNER: gernoteger
   LP_ARCHIVE: solidcraft
-  DEFAULT_SERIES: noble resolute
+  DEFAULT_SERIES: resolute noble jammy
   GH_TOKEN: ${{ github.token }}
 
 jobs:

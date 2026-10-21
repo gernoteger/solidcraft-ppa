@@ -21,6 +21,20 @@ sudo apt update
 sudo apt install solidcraft
 ```
 
+If `apt update` reports `NO_PUBKEY` (or "not signed"), the PPA's Release key
+is missing or not wired into the source entry. Import it and point the entry
+at it:
+
+```sh
+curl -fsSL 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7F1A49AA791B8008' \
+  | sudo gpg --dearmor -o /usr/share/keyrings/solidcraft-ppa.gpg
+for f in /etc/apt/sources.list.d/gernoteger-ubuntu-solidcraft-*.sources; do
+  grep -q '^Signed-By:' "$f" ||
+    echo 'Signed-By: /usr/share/keyrings/solidcraft-ppa.gpg' | sudo tee -a "$f"
+done
+sudo apt-get update
+```
+
 ## One-time setup
 
 1. **Create the PPA** at
